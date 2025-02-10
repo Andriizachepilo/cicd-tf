@@ -49,7 +49,7 @@ func ResourceCICD() *schema.Resource {
 			"container_registry": {
 				Type:      schema.TypeString,
 				Optional:  true,
-				Sensetive: true,
+				Sensitive: true,
 			},
 			"dockerfile_directory": {
 				Type:     schema.TypeString,
