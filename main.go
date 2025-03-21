@@ -1,19 +1,26 @@
 package main
 
 import (
-    "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-    "github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-    "github.com/Andriizachepilo/Andriizachepilo/cicd-tf/cicd"
+	"context"
+	"flag"
+	"log"
+
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
+	"github.com/Andriizachepilo/cicd-tf/internal/provider"
 )
 
 func main() {
-    plugin.Serve(&plugin.ServeOpts{
-        ProviderFunc: func() *schema.Provider {
-            return &schema.Provider{
-                ResourcesMap: map[string]*schema.Resource{
-                    "cicd_example": cicd.ResourceCICD(),
-                },
-            }
-        },
+	var debug bool
+
+	flag.BoolVar(&debug, "debug", false, "Set to true for debug logs.")
+	flag.Parse()
+
+    err := providerserver.Serve(context.Background(), provider.New, providerserver.ServeOpts{
+        Address: "registry.terraform.io/Andriizachepilo/cicd",
+        Debug: debug,
     })
+
+    if err != nil {
+        log.Fatal(err)
+    }
 }
