@@ -5,6 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -36,6 +37,9 @@ func (n *resourceCICD) Schema(ctx context.Context, req resource.SchemaRequest, r
 			"working_directory": schema.StringAttribute{
 				MarkdownDescription: "Working directory for the commands.",
 				Optional:            true,
+				Validators: []validator.String{
+
+				},
 			},
 			"build_and_test": schema.StringAttribute{
 				MarkdownDescription: "Build and test command to be executed.",
@@ -51,10 +55,12 @@ func (n *resourceCICD) Schema(ctx context.Context, req resource.SchemaRequest, r
 
 func (n *resourceCICD) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 
+
+
 }
 
 func (r *resourceCICD) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state cicdModel
+	var state CICDModel
 
 	diags := req.State.Get(ctx, &state)
 	resp.Diagnostics.Append(diags...)
@@ -64,7 +70,7 @@ func (r *resourceCICD) Read(ctx context.Context, req resource.ReadRequest, resp 
 }
 
 func (r *resourceCICD) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan cicdModel
+	var plan CICDModel
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 
@@ -79,7 +85,7 @@ func (r *resourceCICD) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 }
 
-type cicdModel struct {
+type CICDModel struct {
 	ID                   types.String `tfsdk:"id"`
 	Build                types.String `tfsdk:"build"`
 	Test                 types.String `tfsdk:"test"`
