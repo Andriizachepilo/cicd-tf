@@ -7,6 +7,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+
+	"github.com/Andriizachepilo/cicd-tf/validation"
 )
 
 var (
@@ -38,7 +40,7 @@ func (n *resourceCICD) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: "Working directory for the commands.",
 				Optional:            true,
 				Validators: []validator.String{
-
+					validation.WorkDirValidator{},
 				},
 			},
 			"build_and_test": schema.StringAttribute{
@@ -54,8 +56,6 @@ func (n *resourceCICD) Schema(ctx context.Context, req resource.SchemaRequest, r
 }
 
 func (n *resourceCICD) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-
-
 
 }
 
