@@ -4,7 +4,12 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+)
+
+var (
+	_ resource.Resource = (*resourceCICD)(nil)
 )
 
 func cicdResource() resource.Resource {
@@ -36,22 +41,6 @@ func (n *resourceCICD) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: "Build and test command to be executed.",
 				Optional:            true,
 			},
-			"docker_build": schema.StringAttribute{
-				MarkdownDescription: "Docker build command to be executed.",
-				Optional:            true,
-			},
-			"docker_push": schema.StringAttribute{
-				MarkdownDescription: "Docker push command to be executed.",
-				Optional:            true,
-			},
-			"container_registry_url": schema.StringAttribute{
-				MarkdownDescription: "Container registry URL.",
-				Optional:            true,
-			},
-			"dockerfile_directory": schema.StringAttribute{
-				MarkdownDescription: "Directory containing the Dockerfile.",
-				Optional:            true,
-			},
 			"timestamp": schema.StringAttribute{
 				MarkdownDescription: "Timestamp of the last update.",
 				Computed:            true,
@@ -61,17 +50,33 @@ func (n *resourceCICD) Schema(ctx context.Context, req resource.SchemaRequest, r
 }
 
 func (n *resourceCICD) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan cicdModel
+
 }
 
 func (r *resourceCICD) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state cicdModel
+
+	diags := req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
 func (r *resourceCICD) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	r.Create(ctx, resource.CreateRequest(req), &resource.CreateResponse(resp))
+	var plan cicdModel
+
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
 func (r *resourceCICD) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+
 }
 
 type cicdModel struct {
