@@ -60,7 +60,7 @@ func (n *resourceCICD) Create(ctx context.Context, req resource.CreateRequest, r
 }
 
 func (r *resourceCICD) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state CICDModel
+	var state cicdModel
 
 	diags := req.State.Get(ctx, &state)
 	resp.Diagnostics.Append(diags...)
@@ -70,7 +70,7 @@ func (r *resourceCICD) Read(ctx context.Context, req resource.ReadRequest, resp 
 }
 
 func (r *resourceCICD) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan CICDModel
+	var plan cicdModel
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 
@@ -85,7 +85,7 @@ func (r *resourceCICD) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 }
 
-type CICDModel struct {
+type cicdModel struct {
 	ID                   types.String `tfsdk:"id"`
 	Build                types.String `tfsdk:"build"`
 	Test                 types.String `tfsdk:"test"`
